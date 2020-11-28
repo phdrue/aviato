@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Queue;
 use App\Models\Specialty;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Carbon\Carbon;
 
@@ -35,5 +36,25 @@ class PatientController extends Controller
     public function testapi()
     {
         return "sdfasdf";
+    }
+
+
+    public function login(Request $request)
+    {
+        $login = $request->validate([
+            'email'=>'required|string',
+            'password'=>'required|string'
+        ]);
+        if(!Auth::attempt($login)){
+            //return response(['message'=>'Invalid credentrials', 'status'=>422, 'error'=>'incorrect_credentials']);
+            /*return response()->json([
+                "error"=>"invalid credentials", 500
+            ]);*/
+            abort(401);
+        }
+        $user = Auth::user();
+        $token = $user->createToken('Token Name')->accessToken;
+        return response(['user'=>Auth::user(), 'token'=>$token]);
+//        return response(['user'=>Auth::user()]);
     }
 }

@@ -22,6 +22,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('test', [PatientController::class, 'testapi']);
 
+Route::post('login', [PatientController::class, 'login']);
+
 Route::middleware('auth:api')->group(function (){
 
 });
+
+
+//Route::prefix('/user')->group(function (){
+//    Route::post('/login', 'ApiController@login');
+//    Route::middleware('auth:api')->post('/list', 'ApiController@list');
+//    Route::middleware('auth:api')->post('/works', 'ApiController@works');
+//});
