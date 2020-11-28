@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Queue;
+use App\Models\Queues_users;
 use App\Models\Specialty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -56,5 +57,40 @@ class PatientController extends Controller
         $token = $user->createToken('Token Name')->accessToken;
         return response(['user'=>Auth::user(), 'token'=>$token]);
 //        return response(['user'=>Auth::user()]);
+    }
+
+    public function toqueue(Queue $queue)
+    {
+        $user = Auth::user();
+
+        if ($queue->people()->where('user_id', $user->id)->first() != null){
+            abort(404);
+        } else{
+            $position = count($queue->people()->where('status_id', '!=', 5)->get());
+            $position++;
+            $new_item = [
+                'user_id'=>$user->id,
+                'queue_id'=>$queue->id,
+                'status_id'=>1,
+                'position'=>$position
+            ];
+            Queues_users::create($new_item);
+            $message = 'Вы были записаны на прием, ваше место в очереди ' . $position;
+            return response(['message'=>$message]);
+        }
+
+    }
+
+    public function mystatus(Queue $queue)
+    {
+        $user = Auth::user();
+        $status = $queue->people()->where('user_id', $user->id)->first()->status->name;
+        $message = 'Ваш статус в очереди: ' . $status;
+        return response(['message'=> $message]);
+    }
+
+    public function reject(Queue $queue)
+    {
+        $user = Auth::user();
     }
 }

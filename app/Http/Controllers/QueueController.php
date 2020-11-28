@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Doctor;
 use App\Models\Queue;
+use App\Models\Queues_users;
 use App\Models\Schedule;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Validation\Rule;
@@ -62,5 +64,38 @@ class QueueController extends Controller
         ];
         Queue::create($new_queue);
         return redirect()->route('queues.index');
+    }
+
+    //Люди в очереди
+    public function people(Queue $queue)
+    {
+        $people = $queue->people;
+        $statuses = Status::pluck('name', 'id')->toArray();
+        return view('queues.people', compact('queue', 'people', 'statuses'));
+    }
+
+    public function change(Queues_users $item)
+    {
+        \request()->validate([
+            'status_id'=>'required'
+        ]);
+        $item->status_id = \request('status_id');
+        $item->save();
+        \request()->session()->flash('success', 'Статус человека в очереди был изменен');
+        return redirect()->back();
+    }
+
+    public function close(Queue $queue)
+    {
+        $queue->closed = 1;
+        $queue->save();
+        return redirect()->back();
+    }
+
+    public function open(Queue $queue)
+    {
+        $queue->closed = 0;
+        $queue->save();
+        return redirect()->back();
     }
 }

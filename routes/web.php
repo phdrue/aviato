@@ -54,6 +54,14 @@ Route::prefix('admin')->group(function (){
         Route::get('create', [QueueController::class, 'create'])->name('queues.create');
         //Сохранение очереди
         Route::post('store', [QueueController::class, 'store'])->name('queues.store');
+        //Люди в определенной очереди
+        Route::get('people/{queue}', [QueueController::class, 'people'])->name('queues.people');
+        //Изменить статус человека в очереди
+        Route::post('change/{item}', [QueueController::class, 'change'])->name('queues.change');
+        //Закрыть запись
+        Route::get('close/{queue}', [QueueController::class, 'close'])->name('queue.close');
+        //Открыть запись, если она была закрыта
+        Route::get('open/{queue}', [QueueController::class, 'open'])->name('queue.open');
     });
 });
 
@@ -62,3 +70,4 @@ Route::prefix('admin')->group(function (){
 Route::get('start', [PatientController::class, 'start'])->name('patient.start');
 //Получить все доступные очереди на выбранный день
 Route::post('day', [PatientController::class, 'queues_day'])->name('patient.queues');
+

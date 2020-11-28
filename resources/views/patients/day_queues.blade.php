@@ -23,7 +23,11 @@
                             <td>{{$item->doctor->name}}</td>
                             <td>{{$item->doctor->specialty->name}}</td>
                             <td></td>
-                            <td><!-- Button trigger modal -->
+                            <td>
+                                @if (count($item->people) < \App\Models\Schedule::where('doctor_id', $item->doctor_id)->where('day_id',$item->day_id)->first()->number + \App\Models\Schedule::where('doctor_id', $item->doctor_id)->where('day_id',
+$item->day_id)->first()->extra_number && $item->closed == 0)
+
+                                <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#model{{$item->id}}">
                                     Записаться
                                 </button>
@@ -46,7 +50,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div></td>
+                                </div>
+                                    @else
+                                    На этот день нет свободных мест
+                                    @endif
+                            </td>
                         </tr>
                     @empty
                         <h4 class="text-center card-title">Нет данных</h4>

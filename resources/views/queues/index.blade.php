@@ -32,7 +32,7 @@
                         <tr>
                             <td>{{\Carbon\Carbon::parse($item->real_day)->format('d.m.Y') }}</td>
                             <td>{{$item->doctor->name}}</td>
-                            <td></td>
+                            <td><a href="{{route('queues.people', ['queue'=>$item])}}" role="button" class="btn btn-success">Просмотр</a></td>
                         </tr>
                     @empty
                         <h4 class="text-center card-title">Пока нет данных</h4>
