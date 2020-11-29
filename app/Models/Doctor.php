@@ -28,4 +28,9 @@ class Doctor extends Model
         return $this->hasOne(Schedule::class)->where('day_id', $day);
     }
 
+    public function queues()
+    {
+        return $this->hasMany(Queue::class);
+    }
+
 }

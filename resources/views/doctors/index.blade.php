@@ -24,7 +24,7 @@
                             <td>{{$doctor->specialty->name}}</td>
                             <td>
                                 <a href="{{route('doctors.schedule', ['doctor'=>$doctor])}}" role="button" class="btn btn-warning">Расписание</a>
-
+                                <a href="{{route('doctors.stat', ['doctor'=>$doctor])}}" role="button" class="btn btn-primary">Статистика</a>
                             </td>
                         </tr>
                     @empty

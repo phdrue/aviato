@@ -22,7 +22,15 @@
                             <td>{{\Carbon\Carbon::parse($item->real_day)->format('d.m.Y') }}</td>
                             <td>{{$item->doctor->name}}</td>
                             <td>{{$item->doctor->specialty->name}}</td>
-                            <td></td>
+                            <td>
+                                @foreach($days as $day)
+                                    @if (\App\Models\Schedule::where('doctor_id', $item->doctor->id)->where('day_id', $day->id)->first() != null)
+                                        <span class="days day-green">{{substr($day->name, 0, 2)}}</span>
+                                    @else
+                                        <span class="days day-red">{{substr($day->name, 0, 2)}}</span>
+                                    @endif
+                                    @endforeach
+                            </td>
                             <td>
                                 @if (count($item->people) < \App\Models\Schedule::where('doctor_id', $item->doctor_id)->where('day_id',$item->day_id)->first()->number + \App\Models\Schedule::where('doctor_id', $item->doctor_id)->where('day_id',
 $item->day_id)->first()->extra_number && $item->closed == 0)
@@ -37,13 +45,13 @@ $item->day_id)->first()->extra_number && $item->closed == 0)
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Прием на {{$day}} к {{$item->doctor->name}}</h5>
+                                                <h5 class="modal-title" id="exampleModalLabel">Прием к {{$item->doctor->name}}</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                {{QrCode::size(250)->generate($item->id)}}
+                                                {{QrCode::size(250)->generate("http://10.0.2.2:8000/api/toqueue/" . $item->id)}}
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

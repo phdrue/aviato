@@ -17,6 +17,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.1",
         "laravelcollective/html": "^6.2",
+        "phpoffice/phpspreadsheet": "^1.15",
         "simplesoftwareio/simple-qrcode": "~4"
     },
     "require-dev": {

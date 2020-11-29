@@ -20,7 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['register'=>false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -42,6 +42,8 @@ Route::prefix('admin')->group(function (){
         Route::any('schedule/{doctor}', [DoctorController::class, 'get_schedule'])->name('doctors.schedule');
         //создать расписание
         Route::post('schedule/create/{doctor}/{day}', [DoctorController::class, 'create_schedule'])->name('doctors.schedule.create');
+        //Статистика
+        Route::get('stat/{doctor}', [DoctorController::class, 'stat'])->name('doctors.stat');
     });
 
     //Для очередей

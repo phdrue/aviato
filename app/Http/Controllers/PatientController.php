@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Day;
 use App\Models\Queue;
 use App\Models\Queues_users;
 use App\Models\Specialty;
@@ -30,7 +31,8 @@ class PatientController extends Controller
         $day = \request('day');
         $queues = Queue::where('real_day', $day)->get();
         $day = Carbon::parse($day)->format('d.m.Y');
-        return view('patients.day_queues', compact('queues', 'day'));
+        $days = Day::all();
+        return view('patients.day_queues', compact('queues', 'day', 'days'));
     }
 
 
@@ -55,7 +57,8 @@ class PatientController extends Controller
         }
         $user = Auth::user();
         $token = $user->createToken('Token Name')->accessToken;
-        return response(['user'=>Auth::user(), 'token'=>$token]);
+        $userdata = $user->userdata;
+        return response(['user'=>Auth::user(), 'token'=>$token, 'userdata'=>$userdata]);
 //        return response(['user'=>Auth::user()]);
     }
 
@@ -76,7 +79,7 @@ class PatientController extends Controller
             ];
             Queues_users::create($new_item);
             $message = 'Вы были записаны на прием, ваше место в очереди ' . $position;
-            return response(['message'=>$message]);
+            return response(['message'=>$message], 200);
         }
 
     }
