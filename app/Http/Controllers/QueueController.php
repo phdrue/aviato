@@ -14,6 +14,12 @@ use Illuminate\Validation\Rule;
 class QueueController extends Controller
 {
     //
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     //Все очереди
     public function index()
     {
